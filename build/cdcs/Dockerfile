@@ -48,8 +48,7 @@ RUN apt-get update && apt-get install -y git
 
 # Install requirements
 WORKDIR $DOCKYARD_SRVPROJ
-RUN pip install -r requirements.txt
-RUN pip install -r requirements.core.txt
+RUN pip install -r requirements.txt -r requirements.core.txt
 
 
 ### ADDED BY MOHAMMAD ABBAS ###

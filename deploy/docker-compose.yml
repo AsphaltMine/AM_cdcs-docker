@@ -14,8 +14,9 @@ services:
     volumes:
       - cdcs_socket:/tmp/curator/
       - cdcs_static:/srv/curator_static
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/${SERVER_CONF}.conf:/etc/nginx/templates/default.conf.template:ro
+      - cdcs_media:/srv/curator/media
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/${SERVER_CONF}.conf:/etc/nginx/templates/default.conf.template
       - ./nginx/cdcs.crt:/etc/nginx/cdcs.crt:ro
       - ./nginx/cdcs.key:/etc/nginx/cdcs.key:ro
   curator_postgres:
@@ -67,6 +68,8 @@ services:
       - REDIS_HOST=${PROJECT_NAME}_cdcs_redis
       - REDIS_PORT=${REDIS_PORT:-6379}
       - REDIS_PASS=${REDIS_PASS}
+      - PROCESSES=4
+      - THREADS=4
     env_file:
       - ./saml2/.env
       - ./handle/.env
