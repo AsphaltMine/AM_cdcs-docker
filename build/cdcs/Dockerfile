@@ -5,7 +5,8 @@ ARG CDCS_REPO
 ARG BRANCH
 
 # Install git
-RUN apt-get update && apt-get install -y git
+RUN sed -i '/security/d;/updates/d' /etc/apt/sources.list && \
+    apt-get update -o Acquire::Check-Valid-Until=false && apt-get install -y git
 
 # Clone git repository
 RUN git clone --depth 1 -b $BRANCH $CDCS_REPO /tmp/repo
@@ -24,7 +25,10 @@ ENV DOCKYARD_SRVPROJ="/srv/curator"
 COPY --from=clone /tmp/repo $DOCKYARD_SRVPROJ
 
 # Install necessary packages
-RUN apt-get update && apt-get --no-install-recommends install -y \
+RUN sed -i '/security/d;/updates/d' /etc/apt/sources.list && \
+    apt-get update -o Acquire::Check-Valid-Until=false && \
+    apt-get --no-install-recommends install -y --allow-downgrades \
+    libexpat1=2.2.10-2+deb11u5 \
     netcat python g++ gcc dnsutils gettext \
     libxml2-dev libxslt-dev python-dev zlib1g libssl-dev \
     python3-pip libpq-dev postgresql-client xmlsec1 \
@@ -40,7 +44,8 @@ RUN pip install psycopg2 uwsgi gunicorn[gthread]
 
 ### ADDED BY MOHAMMAD ABBAS ###
 # Install git again
-RUN apt-get update && apt-get install -y git
+RUN sed -i '/security/d;/updates/d' /etc/apt/sources.list && \
+    apt-get update -o Acquire::Check-Valid-Until=false && apt-get install -y git
 ###############################
 
 # Copy requirements files
